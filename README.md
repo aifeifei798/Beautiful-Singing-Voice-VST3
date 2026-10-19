@@ -163,10 +163,10 @@ plugin/         # VST3（JUCE 8）：三种模式 + 侧链闪避，同一套 EQ
 
 ## 许可证
 
-本项目代码采用 **Apache License 2.0**，见 [LICENSE](LICENSE)。
+本项目采用 **GNU General Public License v3.0**（GPL-3.0-only），见 [LICENSE](LICENSE)。每个源文件头部都有 SPDX 标记。
 
-第三方依赖各自保留原有许可证，不受本项目影响：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。
+这意味着：你可以自由使用、修改、再分发，包括商用；但如果分发修改后的版本，需要同样以 GPL-3.0 公开源码。
 
-也就是说：**只分发源码**没有问题；如果你要把打包好的二进制（尤其是捆绑了 PyQt6 / pedalboard 的版本）再分发，需要同时满足这些依赖的许可证要求 —— 最省事的做法是让用户自己 `./install.sh` 从 PyPI 安装。
+第三方依赖各自保留原有许可证：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。其中 pedalboard 和 PyQt6 本身就是 GPL-3.0，与本项目一致。
 
-`plugin/` 下的 C++ 代码是 **AGPL-3.0-or-later**（见 [plugin/LICENSE](plugin/LICENSE)），因为它链接 JUCE 8，而 JUCE 8 是 AGPLv3 / 商业双许可。桌面版 Python 部分仍是 Apache-2.0。若要闭源分发插件，需要购买 JUCE 商业许可。
+**`plugin/` 是例外，采用 AGPL-3.0-or-later**（见 [plugin/LICENSE](plugin/LICENSE)）：它链接 JUCE 8，而 JUCE 8 只有 AGPLv3 和商业许可两种选择，没有 GPL 选项。AGPL 比 GPL 更严——通过网络提供服务也算分发。若要让整个仓库统一成 GPL-3.0，只有两条路：向 JUCE 购买商业许可，或者不用 JUCE、直接基于 VST3 SDK（GPLv3 / Steinberg 双许可）重写插件。

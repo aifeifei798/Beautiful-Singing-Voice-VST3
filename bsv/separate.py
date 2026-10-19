@@ -1,5 +1,5 @@
 # Copyright 2026 Feifei
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 """Stem separation via Demucs, run in a subprocess so Qt and CUDA stay apart.
 

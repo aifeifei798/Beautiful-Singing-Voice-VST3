@@ -1,5 +1,5 @@
 # Copyright 2026 Feifei
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 """Fast EQ: second-order sections built with scipy instead of pedalboard plugins.
 

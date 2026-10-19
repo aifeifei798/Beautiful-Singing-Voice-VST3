@@ -1,5 +1,5 @@
 # Copyright 2026 Feifei
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: GPL-3.0-only
 
 """Analysis: find the time slots where Suno tracks actually need help.
 

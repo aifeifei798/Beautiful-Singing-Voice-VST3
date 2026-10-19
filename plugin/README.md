@@ -134,8 +134,9 @@ PASS
 
 ## 许可
 
-`plugin/` 下的 C++ 代码是 **AGPL-3.0-or-later**（见 `plugin/LICENSE`），因为它链接 JUCE 8，
-而 JUCE 8 是 AGPLv3 / 商业双许可。桌面版 Python 部分仍是 Apache-2.0。
+主项目是 **GPL-3.0-only**，但 `plugin/` 下的 C++ 代码是 **AGPL-3.0-or-later**（见 `plugin/LICENSE`），
+因为它链接 JUCE 8，而 JUCE 8 是 AGPLv3 / 商业双许可，没有 GPL 选项。AGPL 比 GPL 更严，
+所以这一块不能降级成 GPL-3.0。
 
-如果你要闭源分发这个插件，需要向 JUCE 购买商业许可，那样就不受 AGPL 约束。
-`plugin/verify.py` 是纯 Python，不链接 JUCE，保持 Apache-2.0。
+要闭源分发这个插件，需要向 JUCE 购买商业许可。
+`plugin/verify.py` 是纯 Python，不链接 JUCE，跟随主项目的 GPL-3.0。

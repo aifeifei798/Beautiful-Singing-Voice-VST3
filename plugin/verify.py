@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Copyright 2026 Feifei
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: GPL-3.0-only
 """Verify the built VST3 against the Python DSP, without a DAW.
 
 The plugin is pushed through the same EQ settings the desktop app uses, and the
