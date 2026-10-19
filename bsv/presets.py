@@ -47,7 +47,7 @@ class Params:
     reverb_room: float = 0.45
     reverb_wet: float = 0.0
     reverb_damping: float = 0.4
-    doubling_db: float = -12.0  # level of EACH double; -60 = off
+    doubling_db: float = -18.0  # level of EACH double; -60 = off
     doubling_ms: float = 25.0
 
     # ---- arrangement / accompaniment ----
@@ -78,39 +78,39 @@ PRESETS: dict[str, Params] = {
     # lead vocal should have. -60 = off.
     "中性 (只修问题)": Params(
         vocal_gain_db=0.0, mud_db=-2.5, presence_db=2.0, air_db=1.5,
-        deesser_amount=0.7, comp_ratio=1.3, duck_db=3.0, doubling_db=-14.0,
+        deesser_amount=0.7, comp_ratio=1.3, duck_db=3.0, doubling_db=-20.0,
     ),
     "中文流行": Params(
         vocal_gain_db=+1.0, mud_db=-3.5, mud2_db=-2.5, warmth_db=1.2,
         presence_db=3.2, air_db=2.2, deesser_amount=0.9, comp_ratio=1.7,
-        duck_db=4.5, music_gain_db=-1.5, doubling_db=-12.0,
+        duck_db=4.5, music_gain_db=-1.5, doubling_db=-18.0,
     ),
     "K-pop ballad": Params(
         vocal_gain_db=+1.5, mud_db=-4.0, warmth_db=1.5, presence_db=2.8,
         air_db=2.6, deesser_amount=1.0, deesser_offset_db=-4.0, comp_ratio=1.9,
-        reverb_room=0.55, duck_db=5.0, music_gain_db=-2.0, doubling_db=-10.0,
+        reverb_room=0.55, duck_db=5.0, music_gain_db=-2.0, doubling_db=-16.0,
     ),
     "EDM / 电子流行": Params(
         vocal_gain_db=+0.8, vocal_hp_hz=60.0, mud_db=-4.0, warmth_db=0.0,
         presence_db=3.6, air_db=2.8, deesser_amount=1.1, deesser_offset_db=-4.0,
         comp_ratio=2.2, comp_attack_ms=12.0, reverb_room=0.3,
-        duck_db=6.0, music_gain_db=0.0, music_hp_hz=25.0, doubling_db=-9.0,
+        duck_db=6.0, music_gain_db=0.0, music_hp_hz=25.0, doubling_db=-15.0,
     ),
     "Rock": Params(
         vocal_gain_db=+0.5, mud_db=-3.0, warmth_db=1.8, presence_db=3.4,
         air_db=1.6, deesser_amount=0.8, comp_ratio=2.0, reverb_room=0.35,
-        duck_db=3.5, music_gain_db=+0.5, doubling_db=-12.0, doubling_ms=18.0,
+        duck_db=3.5, music_gain_db=+0.5, doubling_db=-18.0, doubling_ms=18.0,
     ),
     "Lo-fi / 氛围": Params(
         vocal_gain_db=0.0, mud_db=-2.0, warmth_db=2.2, presence_db=2.0,
         air_db=1.0, deesser_amount=0.6, deesser_offset_db=-7.0, comp_ratio=1.4,
         reverb_room=0.6, duck_db=3.0, music_gain_db=-0.5,
-        target_lufs=-16.0, doubling_db=-16.0, doubling_ms=35.0,
+        target_lufs=-16.0, doubling_db=-22.0, doubling_ms=35.0,
     ),
     "美式流行": Params(
         vocal_gain_db=+1.2, mud_db=-3.8, warmth_db=0.8, presence_db=3.5,
         air_db=2.4, deesser_amount=1.0, comp_ratio=1.8, reverb_room=0.42,
-        duck_db=5.0, music_gain_db=-1.0, doubling_db=-11.0,
+        duck_db=5.0, music_gain_db=-1.0, doubling_db=-17.0,
     ),
 }
 

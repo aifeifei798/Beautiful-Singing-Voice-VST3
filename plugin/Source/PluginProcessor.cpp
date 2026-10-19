@@ -18,14 +18,14 @@ struct PresetValues
 // Mirrors bsv/presets.py. Index 0 ("自定义") is not a preset: it means the knobs
 // are whatever the user left them at.
 const PresetValues kPresets[] = {
-    { "自定义",     -2.0f, 2.0f, 1.5f, 0.7f, 1.3f, -14.0f, 3.0f },
-    { "中性",       -2.5f, 2.0f, 1.5f, 0.7f, 1.3f, -14.0f, 3.0f },
-    { "中文流行",   -3.5f, 3.2f, 2.2f, 0.9f, 1.7f, -12.0f, 4.5f },
-    { "K-pop",      -4.0f, 2.8f, 2.6f, 1.0f, 1.9f, -10.0f, 5.0f },
-    { "EDM",        -4.0f, 3.6f, 2.8f, 1.1f, 2.2f,  -9.0f, 6.0f },
-    { "Rock",       -3.0f, 3.4f, 1.6f, 0.8f, 2.0f, -12.0f, 3.5f },
-    { "Lo-fi",      -2.0f, 2.0f, 1.0f, 0.6f, 1.4f, -16.0f, 3.0f },
-    { "美式",       -3.8f, 3.5f, 2.4f, 1.0f, 1.8f, -11.0f, 5.0f },
+    { "自定义",     -2.0f, 2.0f, 1.5f, 0.7f, 1.3f, -20.0f, 3.0f },
+    { "中性",       -2.5f, 2.0f, 1.5f, 0.7f, 1.3f, -20.0f, 3.0f },
+    { "中文流行",   -3.5f, 3.2f, 2.2f, 0.9f, 1.7f, -18.0f, 4.5f },
+    { "K-pop",      -4.0f, 2.8f, 2.6f, 1.0f, 1.9f, -16.0f, 5.0f },
+    { "EDM",        -4.0f, 3.6f, 2.8f, 1.1f, 2.2f, -15.0f, 6.0f },
+    { "Rock",       -3.0f, 3.4f, 1.6f, 0.8f, 2.0f, -18.0f, 3.5f },
+    { "Lo-fi",      -2.0f, 2.0f, 1.0f, 0.6f, 1.4f, -22.0f, 3.0f },
+    { "美式",       -3.8f, 3.5f, 2.4f, 1.0f, 1.8f, -17.0f, 5.0f },
 };
 
 constexpr int kNumPresets = (int) (sizeof (kPresets) / sizeof (kPresets[0]));
@@ -103,7 +103,7 @@ AudioProcessorValueTreeState::ParameterLayout BSVAudioProcessor::createLayout()
     dyn->addChild (std::make_unique<AudioParameterFloat> (
         kComp, u8 ("压缩比"), NormalisableRange<float> (1.0f, 3.0f, 0.05f), 1.3f));
     dyn->addChild (std::make_unique<AudioParameterFloat> (
-        kDoubling, u8 ("加厚"), NormalisableRange<float> (-60.0f, -6.0f, 1.0f), -14.0f));
+        kDoubling, u8 ("加厚"), NormalisableRange<float> (-60.0f, -6.0f, 1.0f), -20.0f));
     dyn->addChild (std::make_unique<AudioParameterFloat> (
         kDuck, u8 ("闪避"), NormalisableRange<float> (0.0f, 10.0f, 0.1f), 3.0f));
     layout.add (std::move (dyn));

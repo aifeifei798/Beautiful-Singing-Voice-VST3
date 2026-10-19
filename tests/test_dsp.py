@@ -86,7 +86,7 @@ def test_reverb_is_off_by_default():
 def test_doubling_is_on_by_default_but_bounded():
     """Every preset thickens the lead a little; none of it is a slap echo."""
     for name, params in PRESETS.items():
-        assert -20.0 <= params.doubling_db <= -8.0, (name, params.doubling_db)
+        assert -24.0 <= params.doubling_db <= -8.0, (name, params.doubling_db)
         assert 10.0 <= params.doubling_ms <= 60.0, (name, params.doubling_ms)
 
 

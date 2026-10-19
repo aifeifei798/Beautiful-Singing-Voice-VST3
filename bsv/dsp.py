@@ -322,9 +322,13 @@ def add_doubling(x: np.ndarray, sr: int, level_db: float, delay_ms: float,
         -12 dB    +0.45 dB       +0.54 dB       +0.50 dB      0.935
         -10 dB    +0.73 dB       +0.85 dB       +0.76 dB      0.901
 
-    So -14 dB reads as body without touching the level much, which is why the
-    neutral preset sits there. The correlation column is the honest measure of
-    "is it still the same voice" — it stays above 0.95 up to -14 dB.
+    -20 dB is the neutral default: +0.04 dB overall and a 0.989 correlation, so
+    it reads as body without touching the level much. The correlation column is
+    the honest measure of "is it still the same voice" — it stays above 0.95 up
+    to -14 dB, where the doubles start to register as a second voice.
+
+    Headphones expose the detuning on each side, so mixers usually want less here
+    than for a speaker; the UI says as much under the slider.
     """
     if level_db <= -60.0:
         return x

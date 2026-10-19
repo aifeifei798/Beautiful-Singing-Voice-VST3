@@ -46,6 +46,12 @@ SLIDERS = [
     ("目标响度", "target_lufs", -20.0, -8.0, 0.5),
 ]
 
+# Shown under the matching slider, and as its tooltip. Worth the extra row:
+# doubling is the one control whose ideal setting depends on how you listen.
+SLIDER_HINTS = {
+    "doubling_db": "耳机监听建议调低加厚；外放 / 现场感建议拉满。",
+}
+
 A_COLOR = QColor(120, 120, 120)
 B_COLOR = QColor(40, 190, 120)
 A_FILL = QColor(120, 120, 120, 60)
@@ -204,15 +210,31 @@ class StudioWindow(QWidget):
         knob_box = QGroupBox("3. 微调（改完自动重新预览）")
         grid = QGridLayout(knob_box)
         self.knobs: list[tuple[str, QSlider, QLabel, float, float, float]] = []
-        for row, (label, key, lo, hi, step) in enumerate(SLIDERS):
+        row = 0
+        for label, key, lo, hi, step in SLIDERS:
             slider = QSlider(Qt.Orientation.Horizontal)
             slider.setRange(int(lo * 100), int(hi * 100))
             slider.setValue(int(getattr(self.params, key) * 100))
             value = QLabel(f"{getattr(self.params, key):.2f}")
             slider.valueChanged.connect(lambda v, k=key: self._knob_changed(k, v))
-            grid.addWidget(QLabel(label), row, 0)
+            name = QLabel(label)
+            grid.addWidget(name, row, 0)
             grid.addWidget(slider, row, 1)
             grid.addWidget(value, row, 2)
+            row += 1
+
+            hint = SLIDER_HINTS.get(key)
+            if hint:
+                slider.setToolTip(hint)
+                name.setToolTip(hint)
+                value.setToolTip(hint)
+                note = QLabel(hint)
+                note.setWordWrap(True)
+                note.setContentsMargins(0, 0, 0, 4)
+                note.setStyleSheet("color: #8a8f98; font-size: 11px;")
+                grid.addWidget(note, row, 0, 1, 3)
+                row += 1
+
             self.knobs.append((key, slider, value, lo, hi, step))
         left.addWidget(knob_box)
 

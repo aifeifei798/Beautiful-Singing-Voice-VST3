@@ -132,7 +132,8 @@ BSVAudioProcessorEditor::BSVAudioProcessorEditor (BSVAudioProcessor& p)
     addKnob (airKnob, BSVAudioProcessor::kAir, "空气感", { 0.0, 4.0 }, 1.5, " dB");
     addKnob (deessKnob, BSVAudioProcessor::kDeess, "齿音抑制", { 0.0, 1.2 }, 0.7, "");
     addKnob (compKnob, BSVAudioProcessor::kComp, "压缩比", { 1.0, 3.0 }, 1.3, " : 1");
-    addKnob (doublingKnob, BSVAudioProcessor::kDoubling, "加厚", { -60.0, -6.0 }, -14.0, " dB");
+    addKnob (doublingKnob, BSVAudioProcessor::kDoubling, "加厚", { -60.0, -6.0 }, -20.0, " dB");
+    doublingKnob.slider.setTooltip (u8 ("耳机监听建议调低加厚；外放 / 现场感建议拉满。"));
     addKnob (duckKnob, BSVAudioProcessor::kDuck, "闪避", { 0.0, 10.0 }, 3.0, " dB");
     addKnob (outputKnob, BSVAudioProcessor::kOutput, "输出增益", { -12.0, 12.0 }, 0.0, " dB");
     addKnob (ceilingKnob, BSVAudioProcessor::kCeiling, "峰值上限", { -6.0, 0.0 }, -1.0, " dB");
