@@ -112,8 +112,14 @@ bsv --list-presets
 
 同一套修复逻辑也做成了 VST3，直接挂在 DAW 轨道上，不用先分离再导出。
 
+不想自己编译的话，直接下载编译好的：[Releases](https://github.com/aifeifei798/Beautiful-Singing-Voice-VST3/releases)。
+
 ```bash
-./plugin/build.sh          # 首次会自动 clone JUCE，产物在 ~/.vst3/
+# 用现成的
+unzip Beautiful-Singing-Voice-0.1.0-linux-x86_64.zip -d ~/.vst3/
+
+# 或者自己编译（首次会自动 clone JUCE，产物在 ~/.vst3/）
+./plugin/build.sh
 ```
 
 它必须让你选模式：插件不知道自己被挂在哪条轨上，宿主只告诉它"来了一段立体声"。
