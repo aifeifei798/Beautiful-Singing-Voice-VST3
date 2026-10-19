@@ -138,3 +138,11 @@ tests/          # 合成音频的流水线测试
 - 预览只渲染当前区间（默认 30 秒或检测到的热点），导出时才渲染整曲。
 - 响度归一前后会分别测量，A/B 对比时两个版本都按同一目标响度，避免"更响 = 更好"的错觉。
 - `.webp` 是图片格式，若你的导出真是 `.webp` 请先转成音频容器（工具会尝试 ffmpeg，失败即报错）。
+
+## 许可证
+
+本项目代码采用 **Apache License 2.0**，见 [LICENSE](LICENSE)。
+
+第三方依赖各自保留原有许可证，不受本项目影响：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。
+
+也就是说：**只分发源码**没有问题；如果你要把打包好的二进制（尤其是捆绑了 PyQt6 / pedalboard 的版本）再分发，需要同时满足这些依赖的许可证要求 —— 最省事的做法是让用户自己 `./install.sh` 从 PyPI 安装。
