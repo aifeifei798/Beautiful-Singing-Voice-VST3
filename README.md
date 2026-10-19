@@ -179,14 +179,58 @@ plugin/         # VST3（JUCE 8）：三种模式 + 侧链闪避，同一套 EQ
 
 ## 许可证
 
-本项目采用 **GNU General Public License v3.0**（GPL-3.0-only），见 [LICENSE](LICENSE)。每个源文件头部都有 SPDX 标记。
+### 主项目
 
-这意味着：你可以自由使用、修改、再分发，包括商用；但如果分发修改后的版本，需要同样以 GPL-3.0 公开源码。
+Copyright © 2026 Feifei。本项目采用 **GNU General Public License v3.0** 发布（SPDX：`GPL-3.0-only`），完整条款见 [LICENSE](LICENSE)，每个源文件头部均带 SPDX 标识。
 
-第三方依赖各自保留原有许可证：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。其中 pedalboard 和 PyQt6 本身就是 GPL-3.0，与本项目一致。
+简而言之：
 
-**`plugin/` 是例外，采用 AGPL-3.0-or-later**（见 [plugin/LICENSE](plugin/LICENSE)）：它链接 JUCE 8，而 JUCE 8 只有 AGPLv3 和商业许可两种选择，没有 GPL 选项。AGPL 比 GPL 更严——通过网络提供服务也算分发。若要让整个仓库统一成 GPL-3.0，只有两条路：向 JUCE 购买商业许可，或者不用 JUCE、直接基于 VST3 SDK（GPLv3 / Steinberg 双许可）重写插件。
+| 行为 | 是否允许 | 条件 |
+| --- | --- | --- |
+| 个人或商业使用 | 允许 | 无需告知作者 |
+| 修改源代码 | 允许 | 无需告知作者 |
+| 分发原版或修改版 | 允许 | 须以 GPL-3.0 提供完整的对应源代码 |
+| 闭源分发修改版 | 不允许 | 须另行取得授权 |
 
-### 分发编译好的插件时
+本软件按「现状」提供，不附带任何明示或默示的担保，包括但不限于适销性与特定用途适用性的担保。使用本软件产生的任何后果由使用者自行承担。
 
-AGPL 要求"给二进制的人也能拿到源码"。本仓库就是插件的完整源码；JUCE 未做任何修改，固定使用 8.0.12，可从 <https://github.com/juce-framework/JUCE> 取得（`plugin/build.sh` 里写死了版本号和地址）。发 GitHub Release 时，把 release 指向同一个 tag 即可满足要求。
+### 插件子目录的例外
+
+`plugin/` 下的 C++ 代码（`Source/`、`Tools/`）采用 **AGPL-3.0-or-later**，见 [plugin/LICENSE](plugin/LICENSE)。
+
+原因是该部分链接 JUCE 8，而 JUCE 8 仅提供 AGPLv3 与商业许可两种授权，不含 GPL 选项；AGPL 的要求严格于 GPL，无法降级为 GPL-3.0。JUCE 之外的其他文件（如 `plugin/verify.py`、`plugin/build.sh`）仍遵循主项目的 GPL-3.0。
+
+AGPL 第 13 条要求：若通过网络向用户提供本软件的服务，须向这些用户提供对应源代码。本插件为本地运行的 VST3，通常不触及该条款。
+
+如需将整个仓库统一为 GPL-3.0，只有两种途径：向 JUCE 购买商业许可，或移除 JUCE 依赖、直接基于 VST3 SDK（GPLv3 / Steinberg 双许可）重写插件。
+
+### 分发编译产物
+
+分发编译好的插件时，须同时提供可获取对应源代码的途径。本仓库即为插件的完整源代码；JUCE 未作任何修改，固定使用 8.0.12 版本，可从 <https://github.com/juce-framework/JUCE> 取得（版本号与地址见 `plugin/build.sh`）。发布 GitHub Release 时，将 Release 关联到同一 tag 即可满足要求。
+
+### 第三方依赖
+
+第三方组件保留其原有许可证，不受本项目影响：
+
+| 依赖 | 许可证 |
+| --- | --- |
+| Demucs | MIT |
+| PyTorch | BSD-3-Clause |
+| numpy / scipy | BSD-3-Clause |
+| soundfile | BSD-3-Clause |
+| sounddevice | MIT |
+| pedalboard | GPL-3.0 |
+| PyQt6 | GPL-3.0 或商业许可 |
+| JUCE 8 | AGPL-3.0 或商业许可 |
+
+其中 pedalboard 与 PyQt6 本身即为 GPL-3.0，与主项目协议一致。
+
+## 赞助 / Sponsor
+
+**本软件永久开源免费。**
+
+如果你用它做出了爆款音乐 / 视频，或者靠它省下了买商业插件的几百美金 —— 不用给我打钱。
+
+请把省下来的钱，去买杯好茶，或者给你喜欢的独立音乐人买张专辑。
+
+如果一定想以某种方式回馈：给仓库点一个 Star、提一个 Issue、把你踩过的坑写进 Discussion，都比转账更有用。
