@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Analysis: find the time slots where Suno tracks actually need help.
 
 Used by the UI to jump straight to the interesting comparisons instead of

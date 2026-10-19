@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Small seekable playback wrapper around sounddevice, for A/B audition.
 
 The audio handed to the player is always the *preview region* only, so every

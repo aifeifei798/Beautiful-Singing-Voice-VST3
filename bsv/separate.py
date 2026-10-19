@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Stem separation via Demucs, run in a subprocess so Qt and CUDA stay apart.
 
 Results are cached per input file (sha256) so slider tweaks never re-run the model.

@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Fast EQ: second-order sections built with scipy instead of pedalboard plugins.
 
 pedalboard's IIR plugins walk the signal sample by sample in its own wrapper.

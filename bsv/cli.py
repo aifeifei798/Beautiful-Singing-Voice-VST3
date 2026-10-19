@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Command line entry point: `bsv song.mp3 --preset 中文流行 -o out.wav`"""
 
 from __future__ import annotations

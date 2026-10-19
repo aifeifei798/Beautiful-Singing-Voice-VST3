@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Render-time benchmark: how long a one-click fix takes, stage by stage.
 
     .venv/bin/python scripts/bench_render.py path/to/song.flac

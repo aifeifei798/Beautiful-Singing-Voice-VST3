@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Audio I/O: normalise any Suno export (.mp3/.flac/.wav/.webm/...) to 44.1 kHz stereo WAV."""
 
 from __future__ import annotations

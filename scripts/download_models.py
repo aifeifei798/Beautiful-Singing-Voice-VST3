@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Prefetch Demucs weights into the torch hub cache.
 
 Useful when the network/proxy is flaky: torch.hub fails with a hash mismatch on a

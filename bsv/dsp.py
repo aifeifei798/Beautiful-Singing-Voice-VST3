@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """DSP primitives: soft de-clip, EQ, de-esser, sidechain duck, limiter, loudness.
 
 All functions take numpy arrays shaped (n_samples, 2) float32 and a sample rate.

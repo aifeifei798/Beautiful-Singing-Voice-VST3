@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """The one-click pipeline: convert -> separate -> per-stem chains -> remix -> loudness."""
 
 from __future__ import annotations

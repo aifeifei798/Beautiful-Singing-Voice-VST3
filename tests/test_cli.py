@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """CLI parsing: preset names and the argument combinations people actually type."""
 
 from __future__ import annotations

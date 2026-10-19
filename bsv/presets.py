@@ -1,3 +1,6 @@
+# Copyright 2026 Feifei
+# SPDX-License-Identifier: Apache-2.0
+
 """Preset definitions: every preset is a parameter vector over the same processing chain."""
 
 from __future__ import annotations
