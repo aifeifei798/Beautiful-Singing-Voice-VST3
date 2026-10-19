@@ -108,6 +108,24 @@ bsv --list-presets
 - 空格 = 播放/停止，`A` / `B` = 直接切换版本，`←` / `→` = 移动播放头
 - 热点按钮（齿音 / 频段冲突）点击后把预览区间移到那里
 
+## VST3 插件
+
+同一套修复逻辑也做成了 VST3，直接挂在 DAW 轨道上，不用先分离再导出。
+
+```bash
+./plugin/build.sh          # 首次会自动 clone JUCE，产物在 ~/.vst3/
+```
+
+它必须让你选模式：插件不知道自己被挂在哪条轨上，宿主只告诉它"来了一段立体声"。
+
+| 模式 | 挂在哪 | 说明 |
+| --- | --- | --- |
+| **母带 / 整轨**（默认） | master | 温和打磨 + −1 dBFS 真峰值限制，挂错也不会毁工程 |
+| 人声 | 人声轨 | 完整人声链 + 加厚 |
+| 配乐 | 伴奏总线 | 低频清理 + 250–4 kHz 侧链闪避（需接侧链） |
+
+插件的 EQ 与桌面版是同一套双二阶公式，`plugin/verify.py` 会把实测频响和 Python 的预测逐点对比（误差 < 0.35 dB）。细节、构建依赖、侧链接法见 [plugin/README.md](plugin/README.md)。
+
 ## 模型下载失败时
 
 torch 的自动下载容易被代理截断（hash 校验失败 → demucs 直接报错）。手动预下载：
@@ -130,6 +148,10 @@ bsv/
   cli.py        # 命令行
   ui/           # PyQt6 界面 + 可 seek 的播放器
 tests/          # 合成音频的流水线测试
+plugin/         # VST3（JUCE 8）：三种模式 + 侧链闪避，同一套 EQ
+  Source/       #   Dsp.h / PluginProcessor / PluginEditor
+  Tools/        #   Host.cpp —— 无界面测试宿主
+  verify.py     #   把插件当黑盒，对拍 Python 的频响
 ```
 
 ## 说明与限制
@@ -146,3 +168,5 @@ tests/          # 合成音频的流水线测试
 第三方依赖各自保留原有许可证，不受本项目影响：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。
 
 也就是说：**只分发源码**没有问题；如果你要把打包好的二进制（尤其是捆绑了 PyQt6 / pedalboard 的版本）再分发，需要同时满足这些依赖的许可证要求 —— 最省事的做法是让用户自己 `./install.sh` 从 PyPI 安装。
+
+`plugin/` 下的 C++ 代码是 **AGPL-3.0-or-later**（见 [plugin/LICENSE](plugin/LICENSE)），因为它链接 JUCE 8，而 JUCE 8 是 AGPLv3 / 商业双许可。桌面版 Python 部分仍是 Apache-2.0。若要闭源分发插件，需要购买 JUCE 商业许可。
