@@ -28,7 +28,12 @@ Beautiful Singing Voice — VST3
 
 系统要求
 --------
-Linux x86_64，glibc >= 2.35（GitHub Actions 在 Ubuntu 22.04 上构建）。
+Linux x86_64。
+
+官方 Release 的包由 GitHub Actions 在 Ubuntu 22.04 上构建，要求 glibc >= 2.35
+（Ubuntu 22.04+、Debian 12+、Fedora 36+ 等）。自己在本机编译的版本则取决于
+本机 glibc，跟本机一致。
+
 需要 libasound2、libfreetype、libfontconfig、libGL、libcurl、
 libX11、libXrandr、libXinerama、libXcursor、libXcomposite，
 桌面发行版通常都已经装好。
