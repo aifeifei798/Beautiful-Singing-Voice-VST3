@@ -90,7 +90,7 @@ BSVAudioProcessorEditor::BSVAudioProcessorEditor (BSVAudioProcessor& p)
     setLookAndFeel (new StudioLookAndFeel()); // owned by the component tree
     setResizable (true, true);
     setResizeLimits (680, 400, 1100, 720);
-    setSize (760, 470);
+    setSize (760, 488);
 
     title.setText ("Beautiful Singing Voice", dontSendNotification);
     title.setFont (Font (22.0f, Font::bold));
@@ -145,6 +145,13 @@ BSVAudioProcessorEditor::BSVAudioProcessorEditor (BSVAudioProcessor& p)
     scLabel.setFont (Font (11.0f));
     scLabel.setColour (Label::textColourId, kDim);
     addAndMakeVisible (scLabel);
+
+    // The one control whose ideal setting depends on how you listen. Kept
+    // visible in every mode, just dimmed where 加厚 does nothing.
+    doublingHint.setText (u8 ("加厚：耳机监听建议调低，外放 / 现场感建议拉满"), dontSendNotification);
+    doublingHint.setFont (Font (11.0f));
+    doublingHint.setColour (Label::textColourId, kDim);
+    addAndMakeVisible (doublingHint);
 
     updateModeDependent();
     startTimerHz (8);
@@ -222,8 +229,9 @@ void BSVAudioProcessorEditor::resized()
 
     area.removeFromTop (10);
 
-    auto footer = area.removeFromBottom (40);
+    auto footer = area.removeFromBottom (58);
     hintLabel.setBounds (footer.removeFromTop (20));
+    doublingHint.setBounds (footer.removeFromTop (16));
     scLabel.setBounds (footer.removeFromTop (18));
 
     area.removeFromBottom (6);
@@ -299,6 +307,7 @@ void BSVAudioProcessorEditor::updateModeDependent()
     // turning them does nothing
     deessKnob.name.setAlpha (vocal ? 1.0f : 0.35f);
     doublingKnob.name.setAlpha (vocal ? 1.0f : 0.35f);
+    doublingHint.setAlpha (vocal ? 1.0f : 0.5f);
     duckKnob.name.setAlpha (music ? 1.0f : 0.35f);
     mudKnob.name.setAlpha (master ? 0.75f : 1.0f);
     presenceKnob.name.setAlpha (master ? 0.75f : 1.0f);

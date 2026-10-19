@@ -33,7 +33,7 @@ private:
 
     BSVAudioProcessor& processor;
 
-    juce::Label title, subtitle, modeLabel, hintLabel, scLabel;
+    juce::Label title, subtitle, modeLabel, hintLabel, scLabel, doublingHint;
     juce::ComboBox presetBox;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> presetAttachment;
 
