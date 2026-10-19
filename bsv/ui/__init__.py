@@ -1,0 +1,1 @@
+"""Beautiful Singing Voice GUI."""

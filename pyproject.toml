@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beautiful-singing-voice"
+version = "0.1.0"
+description = "One-click Suno vocal & arrangement fix studio (PyQt6)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "soundfile>=0.13",
+  "pedalboard>=0.7",
+  "pyloudnorm>=0.1.1",
+  "sounddevice>=0.4",
+  "PyQt6>=6.6",
+  "pyqtgraph>=0.13",
+]
+
+[project.optional-dependencies]
+separate = [
+  "demucs>=0.11",
+  "torch>=2.1",
+  "torchaudio>=2.1",
+]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+bsv = "bsv.cli:main"
+bsv-ui = "bsv.ui.app:main"
+
+[tool.setuptools.packages.find]
+include = ["bsv*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
