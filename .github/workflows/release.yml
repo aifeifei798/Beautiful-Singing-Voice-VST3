@@ -59,7 +59,7 @@ jobs:
         run: git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git "$HOME/JUCE"
 
       - name: Configure
-        run: cmake -B plugin/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DJUCE_DIR="$HOME/JUCE"
+        run: cmake -S plugin -B plugin/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DJUCE_DIR="$HOME/JUCE"
 
       - name: Build
         run: cmake --build plugin/build --parallel "$(nproc)"
