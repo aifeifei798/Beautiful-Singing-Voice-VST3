@@ -115,11 +115,21 @@ bsv --list-presets
 不想自己编译的话，直接下载编译好的：[Releases](https://github.com/aifeifei798/Beautiful-Singing-Voice-VST3/releases)。
 
 ```bash
-# 用现成的
+# 用现成的（Actions 在 Ubuntu 22.04 上构建，glibc >= 2.35）
 unzip Beautiful-Singing-Voice-0.1.0-linux-x86_64.zip -d ~/.vst3/
 
 # 或者自己编译（首次会自动 clone JUCE，产物在 ~/.vst3/）
 ./plugin/build.sh
+
+# 编译并打出和 Release 一样的 zip 到 dist/
+./plugin/build.sh --package
+```
+
+发布走 CI：`.github/workflows/release.yml` 在推 `v*` tag 时自动编译、冒烟测试
+（确认 12 个参数能枚举出来）、打包并挂到对应 Release 上。手动补一个版本：
+
+```bash
+gh workflow run release-plugin -f tag=v0.1.0
 ```
 
 它必须让你选模式：插件不知道自己被挂在哪条轨上，宿主只告诉它"来了一段立体声"。

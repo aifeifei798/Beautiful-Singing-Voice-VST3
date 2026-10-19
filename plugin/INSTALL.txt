@@ -1,0 +1,41 @@
+Beautiful Singing Voice — VST3
+==============================
+
+安装
+----
+把 "Beautiful Singing Voice.vst3" 整个文件夹复制到：
+
+    ~/.vst3/
+
+也就是：
+
+    cp -r "Beautiful Singing Voice.vst3" ~/.vst3/
+
+（如果是解压本压缩包，直接：unzip ... -d ~/.vst3/）
+
+然后重启 DAW，或在 DAW 里重新扫描 VST3。~/.vst3 是隐藏目录。
+
+用法
+----
+插件必须选一个模式，默认是"母带 / 整轨"：
+
+  * 母带 / 整轨 —— 挂在 master 上，温和打磨 + -1 dBFS 真峰值限制
+  * 人声        —— 挂在人声轨上，完整人声链 + 加厚
+  * 配乐        —— 挂在伴奏总线上，低频清理 + 侧链闪避
+
+配乐模式的闪避需要把人声送进插件的第二个输入（侧链）。
+没接侧链时闪避自动不生效，界面底部会显示"侧链：未连接"。
+
+系统要求
+--------
+Linux x86_64，glibc >= 2.35（GitHub Actions 在 Ubuntu 22.04 上构建）。
+需要 libasound2、libfreetype、libfontconfig、libGL、libcurl、
+libX11、libXrandr、libXinerama、libXcursor、libXcomposite，
+桌面发行版通常都已经装好。
+
+延迟固定为 240 采样 @ 48 kHz（5 ms），切换模式不变。
+
+源码 / 许可
+-----------
+对应源码：https://github.com/aifeifei798/Beautiful-Singing-Voice-VST3
+本插件为 AGPL-3.0-or-later（JUCE 8 的要求），完整许可证见仓库 plugin/LICENSE。

@@ -1,0 +1,98 @@
+name: release-plugin
+
+# Builds the VST3 on Ubuntu 22.04 (glibc 2.35, wider compatibility than 24.04)
+# and attaches the zip to the GitHub release. Runs on a version tag, or by hand
+# for an existing tag.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build and attach to (e.g. v0.1.0)"
+        required: true
+        default: "v0.1.0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  linux-x86_64:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+
+    steps:
+      - name: Resolve tag and version
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build pkg-config \
+            libasound2-dev libfreetype6-dev libfontconfig1-dev \
+            libgl1-mesa-dev libcurl4-openssl-dev \
+            libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxcomposite-dev \
+            xvfb zip
+
+      - name: Cache JUCE
+        id: juce
+        uses: actions/cache@v4
+        with:
+          path: ~/JUCE
+          key: juce-8.0.12
+
+      - name: Clone JUCE
+        if: steps.juce.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git "$HOME/JUCE"
+
+      - name: Configure
+        run: cmake -B plugin/build -G Ninja -DCMAKE_BUILD_TYPE=Release -DJUCE_DIR="$HOME/JUCE"
+
+      - name: Build
+        run: cmake --build plugin/build --parallel "$(nproc)"
+
+      - name: Smoke-test the VST3
+        run: |
+          HOST="plugin/build/BSVHost_artefacts/Release/BSVHost"
+          PLUGIN="$HOME/.vst3/Beautiful Singing Voice.vst3"
+          OUT=$(xvfb-run -a "$HOST" "$PLUGIN" --list)
+          echo "$OUT"
+          echo "$OUT" | grep -q "parameters: 12" || { echo "parameter enumeration failed"; exit 1; }
+          echo "$OUT" | grep -q "母带 / 整轨" || { echo "mode parameter missing"; exit 1; }
+
+      - name: Package
+        run: |
+          set -euo pipefail
+          STAGE=$(mktemp -d)
+          cp -r "$HOME/.vst3/Beautiful Singing Voice.vst3" "$STAGE/"
+          cp plugin/INSTALL.txt "$STAGE/安装说明.txt"
+          mkdir -p dist
+          ZIP="dist/Beautiful-Singing-Voice-${VERSION}-linux-x86_64.zip"
+          (cd "$STAGE" && zip -r -q - .) > "$ZIP"
+          (cd dist && sha256sum "$(basename "$ZIP")" > "$(basename "$ZIP").sha256")
+          unzip -l "$ZIP"
+          cat dist/*.sha256
+
+      - name: Attach to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: Beautiful Singing Voice VST3 ${{ env.VERSION }} (Linux x86_64)
+          body_path: plugin/RELEASE_NOTES.md
+          fail_on_unmatched_files: true
+          files: |
+            dist/Beautiful-Singing-Voice-${{ env.VERSION }}-linux-x86_64.zip
+            dist/Beautiful-Singing-Voice-${{ env.VERSION }}-linux-x86_64.zip.sha256
