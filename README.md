@@ -170,3 +170,7 @@ plugin/         # VST3（JUCE 8）：三种模式 + 侧链闪避，同一套 EQ
 第三方依赖各自保留原有许可证：Demucs（MIT）、numpy / scipy（BSD）、soundfile（BSD）、sounddevice（MIT）、pedalboard（GPL-3.0）、PyQt6（GPL-3.0 或商业授权）、PyTorch（BSD）。其中 pedalboard 和 PyQt6 本身就是 GPL-3.0，与本项目一致。
 
 **`plugin/` 是例外，采用 AGPL-3.0-or-later**（见 [plugin/LICENSE](plugin/LICENSE)）：它链接 JUCE 8，而 JUCE 8 只有 AGPLv3 和商业许可两种选择，没有 GPL 选项。AGPL 比 GPL 更严——通过网络提供服务也算分发。若要让整个仓库统一成 GPL-3.0，只有两条路：向 JUCE 购买商业许可，或者不用 JUCE、直接基于 VST3 SDK（GPLv3 / Steinberg 双许可）重写插件。
+
+### 分发编译好的插件时
+
+AGPL 要求"给二进制的人也能拿到源码"。本仓库就是插件的完整源码；JUCE 未做任何修改，固定使用 8.0.12，可从 <https://github.com/juce-framework/JUCE> 取得（`plugin/build.sh` 里写死了版本号和地址）。发 GitHub Release 时，把 release 指向同一个 tag 即可满足要求。
