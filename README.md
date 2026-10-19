@@ -118,7 +118,7 @@ bsv --list-presets
 
 ```bash
 # 用现成的（Actions 在 Ubuntu 22.04 上构建，glibc >= 2.35）
-unzip Beautiful-Singing-Voice-0.1.0-linux-x86_64.zip -d ~/.vst3/
+unzip Beautiful-Singing-Voice-*-linux-x86_64.zip -d ~/.vst3/
 
 # 或者自己编译（首次会自动 clone JUCE，产物在 ~/.vst3/）
 ./plugin/build.sh
@@ -131,7 +131,7 @@ unzip Beautiful-Singing-Voice-0.1.0-linux-x86_64.zip -d ~/.vst3/
 （确认 12 个参数能枚举出来）、打包并挂到对应 Release 上。手动补一个版本：
 
 ```bash
-gh workflow run release-plugin -f tag=v0.1.0
+gh workflow run release-plugin -f tag=v0.1.1
 ```
 
 它必须让你选模式：插件不知道自己被挂在哪条轨上，宿主只告诉它"来了一段立体声"。
