@@ -89,7 +89,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: bsv-linux
-          path: dist/*
+          path: |
+            dist/*.zip
+            dist/*.sha256
           if-no-files-found: error
 
   windows-x86_64:
@@ -145,13 +147,16 @@ jobs:
             -Path "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3", "dist/安装说明.txt" `
             -DestinationPath $zip
           $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
-          "$hash  $(Split-Path $zip -Leaf)" | Out-File -Encoding ascii "$zip.sha256"
+          # LF only: the publish job verifies this on Linux, and CRLF breaks sha256sum.
+          [IO.File]::WriteAllText("$zip.sha256", "$hash  $(Split-Path $zip -Leaf)`n")
           Get-Content "$zip.sha256"
 
       - uses: actions/upload-artifact@v4
         with:
           name: bsv-windows
-          path: dist/*
+          path: |
+            dist/*.zip
+            dist/*.sha256
           if-no-files-found: error
 
   publish:
