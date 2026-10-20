@@ -141,11 +141,39 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item plugin/INSTALL.txt "dist/安装说明.txt"
           $zip = "dist/Beautiful-Singing-Voice-$env:VERSION-windows-x86_64.zip"
-          Compress-Archive -Force `
-            -Path "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3", "dist/安装说明.txt" `
-            -DestinationPath $zip
+          if (Test-Path $zip) { Remove-Item $zip -Force }
+
+          # Compress-Archive writes the entry names in the OEM code page, which
+          # mangles the Chinese file name on any non-Chinese system. Build the
+          # zip by hand with UTF-8 names and the UTF-8 flag set.
+          Add-Type -AssemblyName System.IO.Compression
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+          $bundle = "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3"
+          $stream = [IO.File]::Open((Join-Path (Get-Location) $zip), [IO.FileMode]::Create)
+          $archive = [IO.Compression.ZipArchive]::new($stream, [IO.Compression.ZipArchiveMode]::Create)
+          try {
+              $root = (Resolve-Path $bundle).Path
+              foreach ($file in Get-ChildItem $bundle -Recurse -File) {
+                  $rel = $file.FullName.Substring($root.Length + 1).Replace('\', '/')
+                  $entry = $archive.CreateEntry($rel, [Text.Encoding]::UTF8)
+                  $es = $entry.Open()
+                  try {
+                      $fs = [IO.File]::OpenRead($file.FullName)
+                      try { $fs.CopyTo($es) } finally { $fs.Dispose() }
+                  } finally { $es.Dispose() }
+              }
+              $note = $archive.CreateEntry("安装说明.txt", [Text.Encoding]::UTF8)
+              $ns = $note.Open()
+              try {
+                  $bytes = [IO.File]::ReadAllBytes("plugin/INSTALL.txt")
+                  $ns.Write($bytes, 0, $bytes.Length)
+              } finally { $ns.Dispose() }
+          } finally {
+              $archive.Dispose()
+              $stream.Dispose()
+          }
           $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
           # LF only: the publish job verifies this on Linux, and CRLF breaks sha256sum.
           [IO.File]::WriteAllText("$zip.sha256", "$hash  $(Split-Path $zip -Leaf)`n")
