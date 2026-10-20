@@ -157,14 +157,14 @@ jobs:
               $root = (Resolve-Path $bundle).Path
               foreach ($file in Get-ChildItem $bundle -Recurse -File) {
                   $rel = $file.FullName.Substring($root.Length + 1).Replace('\', '/')
-                  $entry = $archive.CreateEntry($rel, [Text.Encoding]::UTF8)
+                  $entry = $archive.CreateEntry($rel)
                   $es = $entry.Open()
                   try {
                       $fs = [IO.File]::OpenRead($file.FullName)
                       try { $fs.CopyTo($es) } finally { $fs.Dispose() }
                   } finally { $es.Dispose() }
               }
-              $note = $archive.CreateEntry("安装说明.txt", [Text.Encoding]::UTF8)
+              $note = $archive.CreateEntry("安装说明.txt")
               $ns = $note.Open()
               try {
                   $bytes = [IO.File]::ReadAllBytes("plugin/INSTALL.txt")
