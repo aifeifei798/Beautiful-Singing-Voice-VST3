@@ -35,7 +35,9 @@ def package(bundle: pathlib.Path, out: pathlib.Path, extra: pathlib.Path | None 
             zf.write(extra, extra_name or extra.name)
 
     digest = hashlib.sha256(out.read_bytes()).hexdigest()
-    out.with_name(out.name + ".sha256").write_text(f"{digest}  {out.name}\n", encoding="ascii")
+    # bytes, not text: text mode would turn the newline into CRLF on Windows
+    # and `sha256sum -c` then looks for a file with a stray CR in its name.
+    out.with_name(out.name + ".sha256").write_bytes(f"{digest}  {out.name}\n".encode("ascii"))
     return digest
 
 

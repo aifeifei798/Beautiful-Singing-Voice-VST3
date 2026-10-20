@@ -181,6 +181,9 @@ jobs:
       - name: Show assets
         run: |
           ls -l dist
+          # a CRLF somewhere in the chain would make sha256sum look for a file
+          # with a stray CR in its name
+          sed -i 's/\r$//' dist/*.sha256
           cd dist && sha256sum -c *.sha256
 
       - uses: softprops/action-gh-release@v2
