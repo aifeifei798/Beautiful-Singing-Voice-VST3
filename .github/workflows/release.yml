@@ -129,9 +129,9 @@ jobs:
       - name: Smoke-test the VST3
         shell: pwsh
         run: |
-          $host = "plugin/build/BSVHost_artefacts/Release/BSVHost.exe"
-          $plugin = "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3"
-          $out = & $host $plugin --list 2>&1 | Out-String
+          $hostExe = "plugin/build/BSVHost_artefacts/Release/BSVHost.exe"
+          $pluginPath = "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3"
+          $out = & $hostExe $pluginPath --list 2>&1 | Out-String
           $out
           if ($out -notmatch "parameters: 12") { throw "parameter enumeration failed" }
 
