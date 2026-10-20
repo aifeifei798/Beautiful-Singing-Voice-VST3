@@ -3,17 +3,18 @@ Beautiful Singing Voice — VST3
 
 安装
 ----
-把 "Beautiful Singing Voice.vst3" 整个文件夹复制到：
+把 "Beautiful Singing Voice.vst3" 整个文件夹放进系统的 VST3 目录：
 
-    ~/.vst3/
+  Linux:    ~/.vst3/
+            （隐藏目录；解压即：unzip ... -d ~/.vst3/）
 
-也就是：
+  Windows:  C:\Program Files\Common Files\VST3\
+            （需要管理员权限；或用资源管理器解压进去）
 
-    cp -r "Beautiful Singing Voice.vst3" ~/.vst3/
+  macOS:    ~/Library/Audio/Plug-Ins/VST3/
+            （本 Release 暂未提供 macOS 包，请从源码编译）
 
-（如果是解压本压缩包，直接：unzip ... -d ~/.vst3/）
-
-然后重启 DAW，或在 DAW 里重新扫描 VST3。~/.vst3 是隐藏目录。
+然后重启 DAW，或在 DAW 里重新扫描 VST3。
 
 用法
 ----
@@ -28,7 +29,7 @@ Beautiful Singing Voice — VST3
 
 系统要求
 --------
-Linux x86_64。
+Linux x86_64 或 Windows x86_64。
 
 官方 Release 的包由 GitHub Actions 在 Ubuntu 22.04 上构建，要求 glibc >= 2.35
 （Ubuntu 22.04+、Debian 12+、Fedora 36+ 等）。自己在本机编译的版本则取决于

@@ -116,19 +116,30 @@ bsv --list-presets
 
 不想自己编译的话，直接下载编译好的：[Releases](https://github.com/aifeifei798/Beautiful-Singing-Voice-VST3/releases)。
 
+Release 里有三个平台的包，按系统下：
+
+| 系统 | 文件 | 装到哪 |
+| --- | --- | --- |
+| Linux x86_64 | `...-linux-x86_64.zip` | `~/.vst3/`（glibc ≥ 2.35） |
+| Windows x86_64 | `...-windows-x86_64.zip` | `C:\Program Files\Common Files\VST3\` |
+| 源码编译 | — | `./plugin/build.sh`（首次自动 clone JUCE，产物在 `~/.vst3/`） |
+
+```powershell
+# Windows：解压到公共 VST3 目录（资源管理器里需要管理员权限）
+Expand-Archive Beautiful-Singing-Voice-*-windows-x86_64.zip -DestinationPath "C:\Program Files\Common Files\VST3"
+```
+
 ```bash
-# 用现成的（Actions 在 Ubuntu 22.04 上构建，glibc >= 2.35）
+# Linux：解压到 ~/.vst3
 unzip Beautiful-Singing-Voice-*-linux-x86_64.zip -d ~/.vst3/
 
-# 或者自己编译（首次会自动 clone JUCE，产物在 ~/.vst3/）
-./plugin/build.sh
-
-# 编译并打出和 Release 一样的 zip 到 dist/
+# 自己编译，并打出和 Release 一样的 zip 到 dist/
 ./plugin/build.sh --package
 ```
 
-发布走 CI：`.github/workflows/release.yml` 在推 `v*` tag 时自动编译、冒烟测试
-（确认 12 个参数能枚举出来）、打包并挂到对应 Release 上。手动补一个版本：
+发布走 CI：`.github/workflows/release.yml` 在推 `v*` tag 时并行编译 Linux 与 Windows、
+冒烟测试（确认 12 个参数能枚举出来）、打包并挂到对应 Release 上。`.github/workflows/tests.yml`
+在每次 push 到 `main` 时跑 pytest。手动补一个版本：
 
 ```bash
 gh workflow run release-plugin -f tag=v0.1.1

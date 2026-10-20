@@ -1,8 +1,8 @@
 name: release-plugin
 
-# Builds the VST3 on Ubuntu 22.04 (glibc 2.35, wider compatibility than 24.04)
-# and attaches the zip to the GitHub release. Runs on a version tag, or by hand
-# for an existing tag.
+# Builds the VST3 for Linux (Ubuntu 22.04, glibc 2.35) and Windows, smoke-tests
+# that the host can enumerate the parameters, and attaches the zips to the
+# GitHub release. Runs on a version tag, or by hand for an existing tag.
 on:
   push:
     tags:
@@ -10,9 +10,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to build and attach to (e.g. v0.1.0)"
+        description: "Existing tag to build and attach to (e.g. v0.1.1)"
         required: true
-        default: "v0.1.0"
+        default: "v0.1.1"
 
 permissions:
   contents: write
@@ -86,13 +86,104 @@ jobs:
           unzip -l "$ZIP"
           cat dist/*.sha256
 
-      - name: Attach to release
-        uses: softprops/action-gh-release@v2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bsv-linux
+          path: dist/*
+          if-no-files-found: error
+
+  windows-x86_64:
+    runs-on: windows-2022
+    timeout-minutes: 45
+
+    steps:
+      - name: Resolve tag and version
+        shell: bash
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: Cache JUCE
+        id: juce
+        uses: actions/cache@v4
+        with:
+          path: C:\JUCE
+          key: juce-8.0.12-windows
+
+      - name: Clone JUCE
+        if: steps.juce.outputs.cache-hit != 'true'
+        shell: bash
+        run: git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git /c/JUCE
+
+      - name: Configure
+        run: cmake -S plugin -B plugin/build -DCMAKE_BUILD_TYPE=Release -DJUCE_DIR=C:/JUCE
+
+      - name: Build
+        run: cmake --build plugin/build --config Release --parallel
+
+      - name: Smoke-test the VST3
+        shell: pwsh
+        run: |
+          $host = "plugin/build/BSVHost_artefacts/Release/BSVHost.exe"
+          $plugin = "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3"
+          $out = & $host $plugin --list 2>&1 | Out-String
+          $out
+          if ($out -notmatch "parameters: 12") { throw "parameter enumeration failed" }
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item plugin/INSTALL.txt "dist/安装说明.txt"
+          $zip = "dist/Beautiful-Singing-Voice-$env:VERSION-windows-x86_64.zip"
+          Compress-Archive -Force `
+            -Path "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3", "dist/安装说明.txt" `
+            -DestinationPath $zip
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
+          "$hash  $(Split-Path $zip -Leaf)" | Out-File -Encoding ascii "$zip.sha256"
+          Get-Content "$zip.sha256"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bsv-windows
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: [linux-x86_64, windows-x86_64]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Resolve tag
+        run: echo "TAG=${{ github.event.inputs.tag || github.ref_name }}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: bsv-*
+          merge-multiple: true
+          path: dist
+
+      - name: Show assets
+        run: |
+          ls -l dist
+          cd dist && sha256sum -c *.sha256
+
+      - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG }}
-          name: Beautiful Singing Voice VST3 ${{ env.VERSION }} (Linux x86_64)
+          name: Beautiful Singing Voice VST3 ${{ env.TAG }} (Linux / Windows x86_64)
           body_path: plugin/RELEASE_NOTES.md
           fail_on_unmatched_files: true
           files: |
-            dist/Beautiful-Singing-Voice-${{ env.VERSION }}-linux-x86_64.zip
-            dist/Beautiful-Singing-Voice-${{ env.VERSION }}-linux-x86_64.zip.sha256
+            dist/*.zip
+            dist/*.sha256
