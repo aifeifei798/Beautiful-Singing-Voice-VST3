@@ -40,6 +40,11 @@ def package(bundle: pathlib.Path, out: pathlib.Path, extra: pathlib.Path | None 
 
 
 def main() -> int:
+    # Windows consoles default to a legacy code page, which cannot print the
+    # Chinese file name.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     if len(sys.argv) < 3:
         print(__doc__)
         return 2
