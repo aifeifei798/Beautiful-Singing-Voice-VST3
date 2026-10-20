@@ -110,6 +110,10 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.ref }}
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Cache JUCE
         id: juce
         uses: actions/cache@v4
@@ -138,46 +142,14 @@ jobs:
           if ($out -notmatch "parameters: 12") { throw "parameter enumeration failed" }
 
       - name: Package
-        shell: pwsh
+        shell: bash
         run: |
-          New-Item -ItemType Directory -Force dist | Out-Null
-          $zip = "dist/Beautiful-Singing-Voice-$env:VERSION-windows-x86_64.zip"
-          if (Test-Path $zip) { Remove-Item $zip -Force }
-
-          # Compress-Archive writes the entry names in the OEM code page, which
-          # mangles the Chinese file name on any non-Chinese system. Build the
-          # zip by hand with UTF-8 names and the UTF-8 flag set.
-          Add-Type -AssemblyName System.IO.Compression
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-
-          $bundle = "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3"
-          $stream = [IO.File]::Open((Join-Path (Get-Location) $zip), [IO.FileMode]::Create)
-          $archive = [IO.Compression.ZipArchive]::new($stream, [IO.Compression.ZipArchiveMode]::Create)
-          try {
-              $root = (Resolve-Path $bundle).Path
-              foreach ($file in Get-ChildItem $bundle -Recurse -File) {
-                  $rel = $file.FullName.Substring($root.Length + 1).Replace('\', '/')
-                  $entry = $archive.CreateEntry($rel)
-                  $es = $entry.Open()
-                  try {
-                      $fs = [IO.File]::OpenRead($file.FullName)
-                      try { $fs.CopyTo($es) } finally { $fs.Dispose() }
-                  } finally { $es.Dispose() }
-              }
-              $note = $archive.CreateEntry("安装说明.txt")
-              $ns = $note.Open()
-              try {
-                  $bytes = [IO.File]::ReadAllBytes("plugin/INSTALL.txt")
-                  $ns.Write($bytes, 0, $bytes.Length)
-              } finally { $ns.Dispose() }
-          } finally {
-              $archive.Dispose()
-              $stream.Dispose()
-          }
-          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
-          # LF only: the publish job verifies this on Linux, and CRLF breaks sha256sum.
-          [IO.File]::WriteAllText("$zip.sha256", "$hash  $(Split-Path $zip -Leaf)`n")
-          Get-Content "$zip.sha256"
+          set -euo pipefail
+          mkdir -p dist
+          python plugin/package_windows.py \
+            "plugin/build/BSVStudio_artefacts/Release/VST3/Beautiful Singing Voice.vst3" \
+            "dist/Beautiful-Singing-Voice-${VERSION}-windows-x86_64.zip" \
+            plugin/INSTALL.txt 安装说明.txt
 
       - uses: actions/upload-artifact@v4
         with:
